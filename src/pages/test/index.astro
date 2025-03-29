@@ -1,0 +1,43 @@
+---
+import { gql } from '@apollo/client/core';
+import fetchGraphQL from '../../services/graphql/client';
+
+// Define your test query
+const TEST_QUERY = gql`
+  query Query {
+    hello
+  }
+`;
+
+// Execute the query and capture the result
+let result: any;
+let error: Error | null = null;
+try {
+  // Use the Apollo Client instance to run the query
+  result = await fetchGraphQL.query({ query: TEST_QUERY });
+} catch (err) {
+    error = err instanceof Error ? err : new Error("An unexpected error occurred");
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GraphQL Test</title>
+  </head>
+  <body>
+    <h1>GraphQL Test</h1>
+    {error ? (
+      <div>
+        <h2>Error Occurred:</h2>
+        <pre>{error.message}</pre>
+      </div>
+    ) : (
+      <div>
+        <h2>Query Result:</h2>
+        <!-- This should display "world" if the query is successful -->
+        <pre>{result.data.hello}</pre>
+      </div>
+    )}
+  </body>
+</html>
